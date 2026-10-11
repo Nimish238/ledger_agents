@@ -269,11 +269,23 @@ def answer_question(question):
 
         return max(groups, key=groups.get)
 
+
     # Unique/distinct customers.
     if "customer" in ql and any(
         word in ql for word in ("unique", "distinct", "different")
     ):
-        return len({r["customer"] for r in rows})
+        customer_rows = rows
+
+        # When the question asks for customers who placed paid orders,
+        # count customers only from paid orders.
+        if "paid" in ql:
+            customer_rows = [
+                r for r in customer_rows
+                if r["status"].lower() == "paid"
+            ]
+
+        return len({r["customer"] for r in customer_rows})
+
 
     # Average.
     if "average" in ql or re.search(r"\bavg\b", ql):
