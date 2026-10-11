@@ -326,16 +326,8 @@ def answer_question(question):
             "revenue", "sales", "turnover", "income",
             "earned", "earnings", "paid", "money made",
         )
-    ):
+    ) or "how much" in ql:
         return usd_result(sum_usd(paid))
-
-    # Generic total / amount / value.
-    if any(word in ql for word in ("total", "amount", "value", "money")):
-        return usd_result(sum_usd(paid))
-
-    # Default interpretation: paid-order count.
-    return len(paid)
-
 
 # --------------------------------------------------
 # 8. HTTP endpoints
